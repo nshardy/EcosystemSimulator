@@ -1,6 +1,21 @@
 # Changelog
 
-commit ad22243fa68bdf9cd0f4b614a660a22d9631007c (HEAD -> master, origin/master)
+commit 8e3b24a4c38379157e0badaa54b6c7e71ba2cfde (HEAD -> master)
+Author: Noah Hardy <hardysnoah@icloud.com>
+Date:   Wed Oct 4 08:17:07 2023 -0700
+
+    Version 0.1.3-alpha
+    
+    - Updated CHANGELOG.md
+       - added Version 0.1.2
+    - Updated main.py
+       - added update function from simulation
+    - Updated README.md
+       - added more information in terms of nonrunnable file
+    - Updated simulation.py
+       - added print line to debug
+
+commit ad22243fa68bdf9cd0f4b614a660a22d9631007c (origin/master)
 Author: Noah Hardy <hardysnoah@icloud.com>
 Date:   Tue Oct 3 19:48:39 2023 -0700
 

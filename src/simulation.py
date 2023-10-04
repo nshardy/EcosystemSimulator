@@ -8,7 +8,7 @@ class Simulation:
         self.window = window
         pass
 
-    def update() -> None:
+    def update(self) -> None:
         """Updates per frame"""
         print("updating")
         pass
