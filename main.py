@@ -29,6 +29,7 @@ while run:
     window.fill("black")
 
     # TODO: simulation step
+    simulation.update()
 
     # update pygame window
     pygame.display.update()
