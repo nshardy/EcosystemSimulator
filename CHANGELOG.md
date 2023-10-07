@@ -1,6 +1,17 @@
 # Changelog
 
-commit 8e3b24a4c38379157e0badaa54b6c7e71ba2cfde (HEAD -> master)
+commit c293a5aa4c06975486575b691f11d12187f99149 (HEAD -> master)
+Author: Noah Hardy <hardysnoah@icloud.com>
+Date:   Wed Oct 4 08:22:23 2023 -0700
+
+    Version 0.1.3-alpha.1
+    
+     - Updated CHANGELOG.md
+        - added Version 0.1.3-alpha
+     - Updated simulation.py
+        - added 'self' parameter to update function
+
+commit 8e3b24a4c38379157e0badaa54b6c7e71ba2cfde
 Author: Noah Hardy <hardysnoah@icloud.com>
 Date:   Wed Oct 4 08:17:07 2023 -0700
 

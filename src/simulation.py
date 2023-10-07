@@ -10,5 +10,4 @@ class Simulation:
 
     def update(self) -> None:
         """Updates per frame"""
-        print("updating")
         pass
