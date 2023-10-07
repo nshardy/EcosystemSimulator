@@ -1,6 +1,2 @@
 .vscode/
 .git/
-__pycache__/
-
-*.pyc
-*.pyo

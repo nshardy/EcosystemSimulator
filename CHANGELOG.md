@@ -1,5 +1,16 @@
 # Changelog
 
+commit 6ab11b1b4105f1c9c6b2434fbb64736c80d8bc41 (HEAD -> master)
+Author: Noah Hardy <hardysnoah@icloud.com>
+Date:   Sat Oct 7 11:39:07 2023 -0700
+
+    Version 0.1.3-alpha.2
+    
+     - Updated CHANGELOG.md
+        - added Version 0.1.3-alpha.1
+     - Updated simulation.py
+        - removed the print method to make sure it was working
+
 commit c293a5aa4c06975486575b691f11d12187f99149 (HEAD -> master)
 Author: Noah Hardy <hardysnoah@icloud.com>
 Date:   Wed Oct 4 08:22:23 2023 -0700
