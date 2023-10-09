@@ -1,3 +1,4 @@
+import src.hunter
 import src.tester_entity
 
 
@@ -9,11 +10,16 @@ class Simulation:
             window (surface): the pygame window
         """
         self.window = window
-        self.test_entities = []
+
+        self.test_entities: list = []
+        self.hunters: list = []
 
         self.test_entities.append(src.tester_entity.TesterEntity(self.window))
+        self.hunters.append(src.hunter.Hunter(self.window))
 
-    def update(self) -> None:
+        self.all_entities = self.test_entities + self.hunters
+
+    def update(self, dt) -> None:
         """Updates per frame"""
-        for e in self.test_entities:
-            e.update()
+        for entity in self.all_entities:
+            entity.update(dt)

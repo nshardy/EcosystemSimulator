@@ -1,5 +1,31 @@
 # Changelog
 
+commit 8a00ec868dc9960c9d6e3cb61d0be20f804628bf (HEAD -> master, origin/master)
+Author: Noah Hardy <hardysnoah@icloud.com>
+Date:   Sat Oct 7 12:00:52 2023 -0700
+
+    Version 0.1.3
+
+    Added testing entites and updated the rest of the code to account for it
+
+     - Updated .gitignore
+        - deleted __pycache__/
+        - deleted *.pyc
+        - deleted *.pyo
+     - Updated CHANGELOG.md
+        - added Version 0.1.3-alpha.2
+     - Added entity.py
+        - added __init__() def
+        - added self.window
+        - added self.pos
+        - added self.window
+        - added update() def
+     - Updated simulation.py
+        - added entities list
+        - added updating entities in entity list in update def
+     - Updated tester_entity.py
+        - added TestingEntity class which derives from entity
+
 commit 6ab11b1b4105f1c9c6b2434fbb64736c80d8bc41 (HEAD -> master)
 Author: Noah Hardy <hardysnoah@icloud.com>
 Date:   Sat Oct 7 11:39:07 2023 -0700

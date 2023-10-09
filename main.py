@@ -16,20 +16,28 @@ simulation = Simulation(window)
 run = True
 while run:
     # updates the simulation at a consistent framerate
-    clock.tick(settings.fps)
+    dt = clock.tick(settings.fps)
 
     # get keyboard / quit events
     for e in pygame.event.get():
-        if e.type == pygame.QUIT or (
-            e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE
-        ):
+        if e.type == pygame.QUIT:
             run = False
+
+        if e.type == pygame.KEYDOWN:
+            # quitting simulation
+            if e.key == pygame.K_ESCAPE:
+                run = False
+
+            # restarting simulation
+            if e.key == pygame.K_r:
+                # simulation = None
+                simulation = Simulation(window)
 
     # update background
     window.fill("black")
 
     # TODO: simulation step
-    simulation.update()
+    simulation.update(dt)
 
     # update pygame window
     pygame.display.update()
