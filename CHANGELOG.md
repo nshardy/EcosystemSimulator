@@ -1,5 +1,35 @@
 # Changelog
 
+commit 172e363a69826cd92956928fdf49471dc5228801 (HEAD -> master, origin/master)
+Author: Noah Hardy <hardysnoah@icloud.com>
+Date:   Mon Oct 9 10:21:33 2023 -0700
+
+    Version 0.1.4
+    Added hunters and updated the supporting code to account for it
+    
+     - Updated CHANGELOG.md
+        - added Version 0.1.3
+     - Updated main.py
+        - added dt (Delta Time), the time inbetween frames
+        - added a way to make a new simulation. KeyCode R
+     - Updated entity.py
+        - self.pos changed to random ranges in window_dimensions
+     - Added hunter.py
+        - updated update method to contain settings information
+     - Updated settings.py
+        - updated version
+        - added hunter_color
+        - added hunter_size
+        - added testing_entity_color
+        - added testing_entity_size
+     - Updated simulation.py
+        - made test_entities and hunters statically typed
+        - added self.all_entities
+        - updated entities.update
+     - Updated tester_entity.py
+        - removed self.pos change
+        - updated update method to contain settings information
+
 commit 8a00ec868dc9960c9d6e3cb61d0be20f804628bf (HEAD -> master, origin/master)
 Author: Noah Hardy <hardysnoah@icloud.com>
 Date:   Sat Oct 7 12:00:52 2023 -0700

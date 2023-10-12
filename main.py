@@ -18,11 +18,13 @@ while run:
     # updates the simulation at a consistent framerate
     dt = clock.tick(settings.fps)
 
-    # get keyboard / quit events
+    # events
     for e in pygame.event.get():
+        # gets the main quit function
         if e.type == pygame.QUIT:
             run = False
 
+        # get keyboard events
         if e.type == pygame.KEYDOWN:
             # quitting simulation
             if e.key == pygame.K_ESCAPE:
