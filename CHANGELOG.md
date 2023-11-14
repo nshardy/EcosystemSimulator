@@ -1,5 +1,24 @@
 # Changelog
 
+commit 8fbf30b8cf5c522bed6cae0c81e33f9c5d333b26 (HEAD -> master, origin/master)
+Author: Noah Hardy <hardysnoah@icloud.com>
+Date:   Wed Oct 11 17:27:43 2023 -0700
+
+    Version 0.1.5.alpha
+    
+     - Updated CHANGELOG.md
+        - added Version 0.1.4
+     - Updated main.py
+        - added comments
+     - Updated hunter.py
+        - currently adding basic ai funcionality
+        - added sorting lists by distance to entity
+     - Updated simulation.py
+        - updated import stuff to reduce length of lines
+        - updated entity update() function
+     - Updated tester_entity.py
+        - added base functions
+
 commit 172e363a69826cd92956928fdf49471dc5228801 (HEAD -> master, origin/master)
 Author: Noah Hardy <hardysnoah@icloud.com>
 Date:   Mon Oct 9 10:21:33 2023 -0700

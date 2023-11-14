@@ -1,9 +1,14 @@
-version = "0.1.4"
-window_dimensions = (800, 600)
-fps = 60
+VERSION = "v0.1.000"
+WINDOW_HEIGHT = 16
+WINDOW_SIZE = (800 + WINDOW_HEIGHT, 600 + WINDOW_HEIGHT)
+FONT_SIZE = 14 if WINDOW_HEIGHT > 14 else WINDOW_HEIGHT
 
-hunter_color = "red"
-hunter_size = 5
-
-test_entity_color = "yellow"
-test_entity_size = 4
+FOOD_SIZE = 4
+ENTITY_SIZE = 5
+EGG_SIZE = 3
+ENTITY_WINDOW_BORDER = ENTITY_SIZE * 2
+HUNTER_COLOR = "orangered"
+PREY_COLOR = "cyan"
+FOOD_COLOR = (0, 150, 100)
+MATE_COLOR = "pink"
+EGG_COLOR = "blue"

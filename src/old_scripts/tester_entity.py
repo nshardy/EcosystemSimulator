@@ -11,7 +11,7 @@ class TesterEntity(entity.Entity):
         super().__init__(window)
 
     def update(self, dt, test_entities, hunters) -> None:
-        return super().update(settings.test_entity_color, settings.test_entity_size)
+        return super().update(settings.prey_color, settings.prey_size)
 
     def update_ai_state():
         pass
