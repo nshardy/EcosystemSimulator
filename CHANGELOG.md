@@ -1,5 +1,32 @@
 # Changelog
 
+commit 248b3007d5ad6b2d467e8e1104f4be4c5c0260be (HEAD -> master, origin/master)
+Author: Noah Hardy <hardysnoah@icloud.com>
+Date:   Tue Nov 14 15:56:56 2023 -0800
+
+    Version 0.2.0
+    
+     - Updated CHANGELOG.md
+        - added Version 0.1.5.alpha
+     - Added egg.py
+        - the actual egg that is created when hunters or prey mate
+     - Updated entity.py
+        - updated how the entity is spawned and the boundaries
+     - Added food.py
+        - just another entity but it's the meal for the Prey
+     - Updated hunter.py
+        - updated almost everything
+     - Updated main.py
+        - updated everything
+     - Added prey.py
+        - based on the tester_entity.py, which is no longer used
+     - Updated settings.py
+        - added more options for entities, and window sizing
+     - Updated simulation.py
+        - changed most of the code inside the file
+     - Updated tester_entity.py
+        - changed file location to 'src/old_scripts' instead of 'src'
+
 commit 8fbf30b8cf5c522bed6cae0c81e33f9c5d333b26 (HEAD -> master, origin/master)
 Author: Noah Hardy <hardysnoah@icloud.com>
 Date:   Wed Oct 11 17:27:43 2023 -0700
