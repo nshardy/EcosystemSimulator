@@ -29,7 +29,7 @@ class Simulation:
         self.screen = w
 
         self.start_prey_amount: int = r.randint(2, 5 * 3)
-        self.start_hunter_amount: int = r.randint(2, 5)
+        self.start_hunter_amount: int = r.randint(2, 15)
         self.start_food_amount: int = r.randint(50, 100)
         self.pause_simulation: bool = False
         self.show_debug_lines: bool = bool
@@ -38,8 +38,8 @@ class Simulation:
             self.add_prey()
         for _ in range(self.start_food_amount):
             self.add_food()
-        # for _ in range(self.start_hunter_amount):
-        #     self.add_hunter()
+        for _ in range(self.start_hunter_amount):
+            self.add_hunter()
 
     def add_prey(self) -> None:
         """A method that adds a new prey to the list of prey"""

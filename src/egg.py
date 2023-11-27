@@ -1,5 +1,6 @@
 """The egg Python file
 """
+from pygame import Surface, Vector2
 import settings
 import random as r
 from entity import Entity
@@ -16,7 +17,7 @@ class Egg(Entity):
         prey_list (list): the prey list
     """
 
-    def __init__(self, w, mother, position, p_or_h) -> None:
+    def __init__(self, w, position, p_or_h, mothers_traits=None, fathers_traits=None) -> None:
         """The initializer method
 
         Args:
@@ -28,7 +29,8 @@ class Egg(Entity):
         """
 
         self.screen: Surface = w
-        # self.mother = mother
+        self.mother_traits = mothers_traits
+        self.father_traits = fathers_traits
 
         self.p_or_h: str = p_or_h
         self.time_until_hatch: float = r.randrange(5, 10)
@@ -77,7 +79,9 @@ class Egg(Entity):
         if self.p_or_h == "p":
             from prey import Prey
 
-            child = Prey(w=self.screen)
+            child = Prey(
+                w=self.screen,
+            )
             child.pos = self.pos
             self.prey_list.append(child)
             self.egg_list.remove(self)
@@ -86,7 +90,9 @@ class Egg(Entity):
         elif self.p_or_h == "h":
             from hunter import Hunter
 
-            child = Hunter(w=self.screen)
+            child = Hunter(
+                w=self.screen, mother=self.mother_traits, father=self.father_traits
+            )
             child.pos = self.pos
             self.hunter_list.append(child)
             self.egg_list.remove(self)

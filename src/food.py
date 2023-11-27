@@ -3,6 +3,7 @@
 import entity
 import settings
 import random as r
+from icecream import ic
 
 
 class Food(entity.Entity):
@@ -22,6 +23,8 @@ class Food(entity.Entity):
 
         self.energy = r.uniform(0, 3)
         self.screen = w
+        self.mutated = r.randint(1, 100) == settings.MUTATED_FOOD_CHANCE
+
         super().__init__(w=self.screen)
 
     def update(self, sdl, h, p, f, e, dt) -> None:
@@ -36,9 +39,15 @@ class Food(entity.Entity):
             e (list): the egg list
             dt (float): Description
         """
-        # chance = 0.0001 * (len(p) - len(h))
-        chance = (1 / (len(p) + len(e))) / len(f)
+        chance = 0
+        if len(e) + len(p) != 0:
+            chance = 1 / (len(p) + len(e)) / len(f)
 
         if r.random() < chance:
             f.append(Food(w=self.screen))
-        super().update(dt=dt, color=settings.FOOD_COLOR, size=2 + self.energy)
+
+        super().update(
+            dt=dt,
+            color=settings.MUTATED_FOOD_COLOR if self.mutated else settings.FOOD_COLOR,
+            size=2 + self.energy,
+        )

@@ -47,9 +47,7 @@ class Entity:
             ),
             r.randint(
                 settings.ENTITY_WINDOW_BORDER,
-                w.get_size()[1]
-                - settings.WINDOW_HEIGHT
-                - settings.ENTITY_WINDOW_BORDER,
+                w.get_size()[1] - settings.PIXEL_BORDER - settings.ENTITY_WINDOW_BORDER,
             ),
         )
         self.ai_state = ai_state(value=0)

@@ -35,10 +35,10 @@ version: pygame.Surface = font.render(f"{settings.VERSION}", True, "black")
 
 def update_ui() -> None:
     """Updates the UI of the simulation, located at the bottom of the screen"""
-    if settings.WINDOW_HEIGHT > 0:
+    if settings.PIXEL_BORDER > 0:
         rect = pygame.Rect(
-            (0, window.get_height() - settings.WINDOW_HEIGHT),
-            (window.get_width(), settings.WINDOW_HEIGHT),
+            (0, window.get_height() - settings.PIXEL_BORDER),
+            (window.get_width(), settings.PIXEL_BORDER),
         )
         pygame.draw.rect(window, "white", rect)
 

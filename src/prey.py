@@ -272,9 +272,10 @@ class Prey(Entity):
         """Checking the closest mate if it's in range, and moving to it if it is"""
 
         if self.mates_ordered_by_distance.__len__() > 0:
+            closest_mate = self.mates_ordered_by_distance[0]
             # Get the closest food object and its distance
-            mate_obj = self.mates_ordered_by_distance[0][0]
-            mate_dst = self.mates_ordered_by_distance[0][1]
+            mate_obj = closest_mate[0]
+            mate_dst = closest_mate[1]
 
             # If mate is far away and there's no target, or they aren't wanting a mate, wander
             if (
@@ -310,39 +311,40 @@ class Prey(Entity):
 
     def move_to_mate_target(self) -> None:
         """Moving this prey to the mate"""
-
-        if (
+        if not (
             self.ai_target is not None
             and self.ai_target not in self.food_ordered_by_distance
         ):
-            # Move towards the target
-            self.angle = math.atan2(
-                self.ai_target.pos.y - self.pos.y, self.ai_target.pos.x - self.pos.x
-            )
-            self.move_by_angle_and_speed()
-            dist = pygame.Vector2.distance_to(self.pos, self.ai_target.pos)
-
-            if dist < self.mating_distance and self.gender == True:
-                self.reproductive_urge = 0
-
-            elif dist < self.mating_distance and self.gender == False:
-                self.laying_eggs = True
-
-                while self.laying_eggs:
-                    for _ in range(self.amount_of_offspring):
-                        self.egg_hatch_timer += self.dt
-
-                        if self.egg_hatch_timer > 1.25:
-                            current_pos = pygame.Vector2(self.pos.x, self.pos.y)
-                            child_egg = Egg(self.screen, self, current_pos, "p")
-                            self.energy = 1
-                            self.egg_list.append(child_egg)
-                            self.egg_hatch_timer = 0
-
-                    self.laying_eggs = False
-
-                # TODO: bug with reproducing, creating hundreds of eggs
-                self.reproductive_urge = 0
-        else:
             self.reproductive_urge = 0
             self.move_wander()
+
+        # Move towards the target
+        self.angle = math.atan2(
+            self.ai_target.pos.y - self.pos.y, self.ai_target.pos.x - self.pos.x
+        )
+
+        self.move_by_angle_and_speed()
+        dist = pygame.Vector2.distance_to(self.pos, self.ai_target.pos)
+
+        if dist < self.mating_distance and self.gender == True:
+            self.reproductive_urge = 0
+
+        elif dist < self.mating_distance and self.gender == False:
+            self.laying_eggs = True
+
+            while self.laying_eggs:
+                for _ in range(self.amount_of_offspring):
+                    self.egg_hatch_timer += self.dt
+
+                    if self.egg_hatch_timer > 1.25:
+                        current_pos = pygame.Vector2(self.pos.x, self.pos.y)
+                        child_egg = Egg(self.screen, current_pos, "p", mothers_traits=None, fathers_traits=None)
+                        self.energy = 1
+                        self.egg_list.append(child_egg)
+                        self.egg_hatch_timer = 0
+
+                self.laying_eggs = False
+
+            # TODO: bug with reproducing, creating hundreds of eggs
+            # FIXME: Seems to have fixed itself?
+            self.reproductive_urge = 0

@@ -1,16 +1,17 @@
 """The hunter Python file
 """
 import math
-import entity
-import pygame
-import settings
 import random as r
+
+import pygame
+
+import entity
+import settings
 from egg import Egg
-from entity import ai_state
+from trait import Trait
 
 
 class Hunter(entity.Entity):
-
     """the Hunter class
 
     Attributes:
@@ -25,7 +26,7 @@ class Hunter(entity.Entity):
         screen (surface): the Pygame window
     """
 
-    def __init__(self, w) -> None:
+    def __init__(self, w, mother=None, father=None) -> None:
         """The initializer method
 
         Args:
@@ -40,26 +41,80 @@ class Hunter(entity.Entity):
         self.mates_ordered_by_distance: dict
         self.prey_ordered_by_distance: dict
 
-        self.wander_strength: float = 0.1
+        # self.wander_strength: float = 0.1
         self.speed: int = 1
-        self.chase_speed: float = 3
+        # self.chase_speed: float = self.speed + r.random()
         self.angle: float = r.uniform(0, 2 * math.pi)
 
         self.food_is_priority: bool = False
-        self.prey_check_distance: int = 75
-        self.eating_distance: int = 1
+        # self.prey_check_distance: int = 75
+        # self.eating_distance: int = 1
+        # self.metabolism: float = r.random()
         self.energy: float = 1
-        self.metabolism: float = r.random()
-        self.age: float = r.randrange(20, 50)
+        # self.lifespan: float = r.randrange(20, 50)
         self.age_timer: float = 0
         self.lost_interest_time: int = 5
         self.lost_interest_timer: float = 0
 
         self.reproductive_urge: float = 0
         self.mate_is_priority: bool = False
-        self.mate_detection_distance: int = 300
-        self.gender: bool = bool(r.getrandbits(1))
+        # self.mate_detection_distance: int = 300
+        # self.gender: bool = r.choice([False, True])
         self.mating_distance: int = 5
+
+        self.trait__gender: Trait = Trait(None, None)
+        self.trait__wander_strength: Trait = Trait(None, None)
+        self.trait__chase_speed: Trait = Trait(None, None)
+        self.trait__prey_check_distance: Trait = Trait(None, None)
+        self.trait__mate_detection_distance: Trait = Trait(None, None)
+        self.trait__eating_distance: Trait = Trait(None, None)
+        self.trait__metabolism: Trait = Trait(None, None)
+        self.trait__lifespan: Trait = Trait(None, None)
+
+        self.traits = [
+            self.trait__gender,
+            self.trait__wander_strength,
+            self.trait__chase_speed,
+            self.trait__prey_check_distance,
+            self.trait__eating_distance,
+            self.trait__metabolism,
+            self.trait__lifespan,
+        ]
+
+        if not mother and not father:
+            self.trait__gender = Trait(True, r.choice([True, False]))
+            self.trait__wander_strength = Trait(r.choice([True, False]), r.random())
+            self.trait__prey_check_distance = Trait(r.choice([True, False]), 75)
+            self.trait__eating_distance = Trait(r.choice([True, False]), 1)
+            self.trait__metabolism = Trait(r.choice([True, False]), r.random())
+            self.trait__lifespan = Trait(r.choice([True, False]), r.randrange(20, 50))
+            self.trait__chase_speed = Trait(
+                r.choice([True, False]), self.speed + r.random()
+            )
+            self.trait__mate_detection_distance = Trait(
+                r.choice([True, False]), r.randrange(75, 300)
+            )
+        elif mother and not father:
+            for trait in self.traits:
+                index = self.traits.index(trait)
+                self.traits[index].trait_value = father.traits[index].trait_value
+        elif not mother and father:
+            for trait in self.traits:
+                index = self.traits.index(trait)
+                self.traits[index].trait_value = mother.traits[index].trait_value
+        else:
+            for trait in self.traits:
+                index = self.traits.index(trait)
+                self.traits[index].trait_value = Trait.compare_traits(
+                    trait, mother_traits=mother, father_traits=father
+                )
+            # self.gender = Trait.compare_traits(mother_traits=mother, father_traits=father)
+            # self.wander_strength: Trait(r.choice([True, False]), r.random())
+            # self.chase_speed: Trait = Trait(
+            # self.prey_check_distance: Trait = Trait(r.choice([True, False]), 75)
+            # self.eating_distance: Trait = Trait(r.choice([True, False]), 1)
+            # self.metabolism: Trait = Trait(r.choice([True, False]), r.random())
+            # self.lifespan: Trait = Trait(r.choice([True, False]), r.randrange(20, 50))
 
         self.ai_target: entity = None
         self.dt: float = 0
@@ -80,9 +135,9 @@ class Hunter(entity.Entity):
         """
 
         self.dt: float = dt
-        self.hunter_list: list = h
-        self.prey_list: list = p
         self.egg_list: list = e
+        self.prey_list: list = p
+        self.hunter_list: list = h
 
         if sdl:
             if self.ai_target is not None and self.ai_target in self.prey_list:
@@ -94,12 +149,12 @@ class Hunter(entity.Entity):
                     self.screen, settings.MATE_COLOR, self.pos, self.ai_target.pos
                 )
 
-        self.reproductive_urge += dt * self.metabolism * 0.1
-        self.energy -= dt * self.metabolism * 0.1
-        self.age_timer += dt * self.metabolism * 0.1
+        self.reproductive_urge = 1 + self.trait__metabolism.trait_value
+        self.energy -= dt * self.trait__metabolism.trait_value * 0.1
+        self.age_timer += dt * self.trait__metabolism.trait_value * 0.1
 
-        self.prey_ordered_by_distance = self.update_dict_by_distance(self.prey_list)
-        self.mates_ordered_by_distance = self.update_dict_by_distance(self.hunter_list)
+        self.prey_ordered_by_distance = self.update_dict_by_distance(p)
+        self.mates_ordered_by_distance = self.update_dict_by_distance(h)
 
         self.ai_state_management()
         self.ai_state_logic()
@@ -155,21 +210,21 @@ class Hunter(entity.Entity):
             h (list): the hunter list
         """
 
-        if self.energy <= 0 or self.age_timer > self.age:
+        if self.energy <= 0 or self.age_timer > self.trait__lifespan.trait_value:
             h.remove(self)
 
     def move_wander(self) -> None:
         """Controls wandering around randomly"""
 
         if (
-            self.pos.x < 0 + settings.ENTITY_WINDOW_BORDER
-            or self.pos.x > 800
-            or self.pos.y < 0 + settings.ENTITY_WINDOW_BORDER
-            or self.pos.y > 600
+                self.pos.x < 0 + settings.ENTITY_WINDOW_BORDER
+                or self.pos.x > 800
+                or self.pos.y < 0 + settings.ENTITY_WINDOW_BORDER
+                or self.pos.y > 600
         ):
             self.angle += math.pi
 
-        if r.random() < self.wander_strength:
+        if r.random() < self.trait__wander_strength.trait_value:
             self.angle += r.uniform(-0.5, 0.5)
 
         self.move_by_angle_and_speed()
@@ -177,12 +232,12 @@ class Hunter(entity.Entity):
     def move_by_angle_and_speed(self) -> None:
         """Move entity based on angle and speed"""
 
-        if self.ai_target is None:
+        if self.ai_target and self.ai_target not in self.prey_ordered_by_distance:
             self.pos.x += self.speed * math.cos(self.angle)
             self.pos.y += self.speed * math.sin(self.angle)
         else:
-            self.pos.x += self.chase_speed * math.cos(self.angle)
-            self.pos.y += self.chase_speed * math.sin(self.angle)
+            self.pos.x += self.trait__chase_speed.trait_value * math.cos(self.angle)
+            self.pos.y += self.trait__chase_speed.trait_value * math.sin(self.angle)
 
     def check_for_prey(self) -> None:
         """Checking the closest prey if it's in range, and moving to it if it is"""
@@ -192,10 +247,13 @@ class Hunter(entity.Entity):
             prey_dst = self.prey_ordered_by_distance[0][1]
 
             # If food is far away and there's no target, wander
-            if prey_dst > self.prey_check_distance and self.ai_target is None:
+            if (
+                    prey_dst > self.trait__prey_check_distance.trait_value
+                    and self.ai_target is None
+            ):
                 self.move_wander()
             # If food is within distance, set it as the target
-            elif prey_dst < self.prey_check_distance:
+            elif prey_dst < self.trait__prey_check_distance.trait_value:
                 del self.ai_target
                 self.ai_target = prey_obj
 
@@ -225,7 +283,7 @@ class Hunter(entity.Entity):
 
             dist = pygame.Vector2.distance_to(self.pos, self.ai_target.pos)
             # Check if close enough to target
-            if dist < self.eating_distance:
+            if dist < self.trait__eating_distance.trait_value:
                 # Remove target if it's a food object
                 self.energy = 1
                 if self.ai_target in self.prey_list:
@@ -243,15 +301,16 @@ class Hunter(entity.Entity):
 
             # If mate is far away and there's no target, or they aren't wanting a mate, wander
             if (
-                mate_dst > self.mate_detection_distance and self.ai_target is None
-            ) or mate_obj.mate_is_priority == False:
+                    mate_dst > self.trait__mate_detection_distance.trait_value
+                    and self.ai_target is None
+            ) or mate_obj.mate_is_priority is False:
                 self.ai_target = None
 
             # If mate is within distance, opposite gender and wanting a mate, set it as the target
             elif (
-                mate_dst < self.mate_detection_distance
-                and self.gender != mate_obj.gender
-                and mate_obj.mate_is_priority
+                    mate_dst < self.trait__mate_detection_distance.trait_value
+                    and self.trait__gender.trait_value != mate_obj.trait__gender.trait_value
+                    and mate_obj.mate_is_priority
             ):
                 self.ai_target = mate_obj
 
@@ -267,7 +326,11 @@ class Hunter(entity.Entity):
     def move_to_mate_target(self) -> None:
         """Moving this hunter to the mate"""
 
-        if self.ai_target not in self.prey_ordered_by_distance:
+        if (
+                self.ai_target
+                not in self.prey_ordered_by_distance
+                # and self.ai_target in self.mates_ordered_by_distance
+        ):
             # Move towards the target
             self.angle = math.atan2(
                 self.ai_target.pos.y - self.pos.y, self.ai_target.pos.x - self.pos.x
@@ -275,13 +338,23 @@ class Hunter(entity.Entity):
             self.move_by_angle_and_speed()
             dist = pygame.Vector2.distance_to(self.pos, self.ai_target.pos)
 
-            if dist < self.mating_distance and self.gender == True:
+            if dist < self.mating_distance and self.trait__gender.trait_value == True:
                 self.reproductive_urge = 0
-            elif dist < self.mating_distance and self.gender == False:
+                self.energy -= self.trait__metabolism.trait_value
+            elif (
+                    dist < self.mating_distance and self.trait__gender.trait_value == False
+            ):
                 current_pos = pygame.Vector2(self.pos.x, self.pos.y)
-                child_egg = Egg(self.screen, self, current_pos, "h")
+                child_egg = Egg(
+                    self.screen,
+                    current_pos,
+                    "h",
+                    mothers_traits=self.traits,
+                    fathers_traits=self.ai_target.traits,
+                )
                 self.egg_list.append(child_egg)
                 self.reproductive_urge = 0
+                self.energy -= self.trait__metabolism.trait_value
         else:
             self.reproductive_urge = 0
             self.move_wander()
